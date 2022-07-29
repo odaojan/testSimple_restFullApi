@@ -13,7 +13,7 @@ class ProductRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,15 @@ class ProductRequest extends FormRequest
      */
     public function rules()
     {
+        $name_rules = 'required|string|min:2|max:100|unique:products,name,';
+
+        if ($this->getMethod() == 'PUT') $name_rules .= $this->product->id;
+    
         return [
-            //
+            'name' => $name_rules,
+            'price' => 'required|numeric',
+            'active' => 'boolean',
         ];
+
     }
 }
